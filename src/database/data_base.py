@@ -51,3 +51,13 @@ class LeadData:
             dict_reader = DictReader(file)
             data = list(dict_reader)
             return data
+        
+    
+    def get_data(self:object) -> None:
+
+        return self.data
+    
+    def lead_search(self:object , lead_id:str) -> dict:
+        pass
+
+
