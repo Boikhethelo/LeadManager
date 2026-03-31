@@ -1,0 +1,45 @@
+{
+    "companies": [
+        {
+            "CompanyID": "1",
+            "Name": "TechCorp",
+            "Industry": "Software"
+        },
+        {
+            "CompanyID": "2",
+            "Name": "HealthPlus",
+            "Industry": "Healthcare"
+        }
+    ],
+
+    "contacts": [
+        {
+            "ContactID": "101",
+            "Name": "John Doe",
+            "Email": "john@techcorp.com",
+            "CompanyID": "1"
+        },
+        {
+            "ContactID": "102",
+            "Name": "Jane Smith",
+            "Email": "jane@healthplus.com",
+            "CompanyID": "2"
+        }
+    ],
+
+    "leads": [
+        {
+            "LeadID": "201",
+            "CompanyID": "1",
+            "Status": "Hot"
+        }
+    ],
+
+    "interactions": [
+        {
+            "InteractionID": "301",
+            "LeadID": "201",
+            "Type": "Email"
+        }
+    ]
+}
