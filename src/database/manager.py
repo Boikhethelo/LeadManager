@@ -23,11 +23,17 @@ class LeadManager:
 
 
 
-    def search_by_id(self, lead_id: str) -> dict | None:
-        "FIX"
+    def search_by_id(self, id: str , key:str)  -> list[dict] | None:
+        """
+        takes a key and an id and returns all data associated with the key and id
+        """
+        output = []
         for category in self.data.values():
             
             for lead in category:
-                if lead.get("id") == lead_id:
-                    return lead
-        return None
+                if lead.get(f"{key}") == id:
+                    output.append(lead)
+
+        return output
+    
+    
