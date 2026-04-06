@@ -27,7 +27,6 @@ class LeadManager:
         """
         takes a key and an id and returns all data associated with the key and id
         """
-        print("passing")
         output = []
         for category in self.data.values():
             

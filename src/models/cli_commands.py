@@ -23,12 +23,12 @@ class Config:
 
 
 class SearchHandler:
+    def __init__(self):
+        self.commands = commands.Commands()
+
     def handle(self, args: argparse.Namespace) -> None:
-        commands.Commands.search(args.name_number, args.key)
+        self.commands.search(args.name_number, args.key)
         
-
-
-
 
 class Controller:
     def __init__(self, config:Config):
@@ -43,9 +43,10 @@ class Controller:
             args = self.parser.parse_args(input.split())
             handler = self.handlers.get(args.command)
             if handler:
+               
                 handler.handle(args)
         except Exception as e:
-            print("Error running command")
+            print(f"Error:{e}")
         
     
 
