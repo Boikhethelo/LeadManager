@@ -10,7 +10,7 @@ class LeadFileHandler:
 
     """
 
-    def __init__(self, directory="src/files/"):
+    def __init__(self, directory="/home/mogs/LeadManager/src/files/"):
         self.directory = directory
 
     def read_file(self, filename: str) -> list[dict]:
@@ -30,7 +30,7 @@ class LeadConfig:
     This class handles the reading of the config file and storing its parameters.
     
     """
-    def __init__(self, config_path="src/database/config.ini"):
+    def __init__(self, config_path="/home/mogs/LeadManager/src/database/config.ini"):
         self.path = config_path
 
     def get_definitions(self) -> list[dict]:

@@ -1,4 +1,10 @@
+from database import manager
+
 class Commands:
 
-    def search(self , name_number : str , key : str):
-        pass
+    @staticmethod
+    def search(user_input : str , key : str) -> None:
+
+        if key.lower().strip() == "id":
+            manager.LeadManager.search_by_id(user_input)
+

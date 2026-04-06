@@ -1,8 +1,8 @@
 import os
-from creator import LeadFileHandler , LeadConfig
+from database import creator
 
 class LeadManager:
-    def __init__(self, handler: LeadFileHandler, config: LeadConfig):
+    def __init__(self, handler: creator.LeadFileHandler, config: creator.LeadConfig):
         self.handler = handler
         self.config = config
         self.data = {}
@@ -23,15 +23,16 @@ class LeadManager:
 
 
 
-    def search_by_id(self, id: str , key:str)  -> list[dict] | None:
+    def search_by_id(self, id: str)  -> list[dict] | None:
         """
         takes a key and an id and returns all data associated with the key and id
         """
+        print("passing")
         output = []
         for category in self.data.values():
             
             for lead in category:
-                if lead.get(f"{key}") == id:
+                if lead.get("ID") == id:
                     output.append(lead)
 
         return output

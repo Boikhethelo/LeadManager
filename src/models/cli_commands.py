@@ -1,24 +1,30 @@
 import argparse
-import commands
+from models import commands
 
 class Config:
-    def __init__(self , commands:commands):
+    def __init__(self):
 
-        self.parser = argparse.ArgumentParser(description="Lead Manager")
-        self.subparsers = self.parser.add_subparsers(dest="command" , required=True)
+        self.parser = self.parser()
+        self.subparsers = self.subparsers()
         self.searh_parser()
+    
+    def parser(self):
+        return argparse.ArgumentParser(description="Lead Manager")
+    
+    def subparsers(self):
+        return self.parser.add_subparsers(dest="command" , required=True)
 
     
     def searh_parser(self):
             search_parser = self.subparsers.add_parser("search")
             search_parser.add_argument("name_number" , help = "None")
-            search_parser.add_argument("key" , choices=["company" , "contacts" , "interactions" , "leads"])
+            search_parser.add_argument("key" , choices=["company" , "contacts" , "interactions" , "id"])
             
 
 
 class SearchHandler:
     def handle(self, args: argparse.Namespace) -> None:
-        commands.Commands.search(args.name_number, args.keys)
+        commands.Commands.search(args.name_number, args.key)
         
 
 
@@ -26,12 +32,13 @@ class SearchHandler:
 
 class Controller:
     def __init__(self, config:Config):
-        self.parser =config.parser
+        self.parser = config.parser
         self.handlers = {"search" : SearchHandler()}
         
     
 
     def run(self,input:str) -> None:
+    
         try:
             args = self.parser.parse_args(input.split())
             handler = self.handlers.get(args.command)
