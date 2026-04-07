@@ -39,14 +39,14 @@ class Controller:
 
     def run(self,input:str) -> None:
     
-        try:
+        # try:
             args = self.parser.parse_args(input.split())
             handler = self.handlers.get(args.command)
             if handler:
                
                 handler.handle(args)
-        except Exception as e:
-            print(f"Error:{e}")
+        # except Exception as e:
+        #     print(f"Error:{e}")
         
     
 

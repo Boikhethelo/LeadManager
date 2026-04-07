@@ -1,4 +1,6 @@
 ID,Name,Role,Decision Maker,LinkedIn
-L1,Thabo Mokoena,CTO,True,linkedin.com/in/thabom
-L2,Sarah Jenkins,Procurement,False,linkedin.com/in/sjenkins
-L3,Zanele Khumalo,CEO,True,linkedin.com/in/zkhumalo
+1,James Mokoena,CEO,Yes,linkedin.com/in/jamesmokoena
+2,Sarah Dlamini,CTO,Yes,linkedin.com/in/sarahdlamini
+3,Thabo Nkosi,Procurement Manager,No,linkedin.com/in/thabonkosi
+4,Lisa van der Berg,CFO,Yes,linkedin.com/in/lisavdberg
+5,Ravi Pillay,IT Director,No,linkedin.com/in/ravipillay

@@ -10,5 +10,6 @@ class Commands:
     def search(self,user_input : str , key : str) -> None:
 
         if key.lower().strip() == "id":
+            self.lead_manager.initialize_system()
             return self.lead_manager.search_by_id(user_input)
 

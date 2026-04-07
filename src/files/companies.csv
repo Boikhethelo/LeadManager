@@ -1,4 +1,6 @@
 ID,Name,Industry,Website,Annual Revenue
-L1,Nexus Tech,Software,https://nexustech.co.za,5000000
-L2,Green Horizon,Renewables,https://greenh.com,1200000
-L3,Coastal Logistics,Shipping,https://coastal-log.za,8500000
+1,Acme Corp,Manufacturing,www.acmecorp.com,5000000
+2,TechNova,Software,www.technova.io,12000000
+3,GreenLeaf,Agriculture,www.greenleaf.co.za,3200000
+4,BlueSky Finance,Financial Services,www.blueskyfinance.com,8700000
+5,MediCare Solutions,Healthcare,www.medicaresolutions.co.za,6100000

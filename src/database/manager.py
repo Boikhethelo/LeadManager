@@ -28,10 +28,14 @@ class LeadManager:
         takes a key and an id and returns all data associated with the key and id
         """
         output = []
+
+        print(self.data)
+        print("\n\n")
+      
         for category in self.data.values():
-            
             for lead in category:
                 if lead.get("ID") == id:
+                    print(lead)
                     output.append(lead)
 
         return output

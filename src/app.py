@@ -7,7 +7,7 @@ class App:
 
     def main(self):
 
-        test = "search L1 id"
+        test = "search 1 id"
 
         self.controller.run(test)
 
