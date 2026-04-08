@@ -3,6 +3,10 @@ from database import creator
 from pprint import pprint
 
 class LeadManager:
+    """
+    A class to handled the data from the csv files stored in memory
+    
+    """
     def __init__(self, handler: creator.LeadFileHandler, config: creator.LeadConfig):
         self.handler = handler
         self.config = config
