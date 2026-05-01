@@ -2,7 +2,7 @@ import os
 import unittest
 from unittest.mock import MagicMock, patch, call
 
-from database.manager import LeadManager
+from database.csv_repository import LeadManager
 
 
 

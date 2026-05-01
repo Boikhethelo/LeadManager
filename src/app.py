@@ -1,9 +1,15 @@
-from models import cli_commands
+from database.csv_repository import CsvLeadRepository, LeadFileHandler, LeadConfig
+from models.cli_commands import Controller, Config
+from models.commands import Commands
+
 
 class App:
-    def __init__(self): 
+    def __init__(self):
+        handler  = LeadFileHandler()
+        config = LeadConfig()
+        repository = CsvLeadRepository(handler , config)
 
-        self.controller = cli_commands.Controller(cli_commands.Config())
+        self.controller = Controller(Config() , Commands(repository))
 
     def main(self):
 

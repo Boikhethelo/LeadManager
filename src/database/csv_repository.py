@@ -1,0 +1,119 @@
+import os
+import csv
+import configparser
+import ast
+from csv import DictReader
+from pathlib import Path
+
+from pprint import pprint
+
+from database.repository import LeadRepository
+
+BASE_DIR = Path(__file__).resolve().parent
+
+
+
+class LeadConfig:
+     """
+
+     This class handles the reading of the config file and storing its parameters.
+
+     """
+
+     def __init__(self, config_path: Path = BASE_DIR / "config.ini"):
+         self.path = Path(config_path)
+
+     def get_definitions(self) -> list[dict]:
+         config = configparser.ConfigParser()
+         config.read(self.path)
+
+         fields_dict = []
+         for file in config["Files"]:
+             name = config["Files"][file]
+             header_name = name.removesuffix(".csv")
+             header = ast.literal_eval(config["Fields"].get(header_name, "[]"))
+             fields_dict.append({"filename": name, "header": header, "key": header_name})
+
+         return fields_dict
+
+
+
+
+class LeadFileHandler:
+
+    """
+    This class handles the reading and writing of the csv files
+
+    """
+
+    def __init__(self, directory: Path = BASE_DIR.parent/"files"):
+        self.directory = Path(directory)
+
+    def read_file(self, filename: str) -> list[dict]:
+        with open(f"{self.directory}/{filename}", 'r') as file:
+            return list(DictReader(file))
+
+    def write_file(self, filename: str, header: list[str]) -> None:
+        with open(f"{self.directory}/{filename}", "w", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=header)
+            writer.writeheader()
+
+
+
+class CsvLeadRepository(LeadRepository):
+    """
+    A class to handled the data from the csv files stored in memory
+    
+    """
+    def __init__(self, handler:LeadFileHandler, config:LeadConfig):
+        self.handler = handler
+        self.config = config
+        self.data = {}
+
+    def ensure_loaded(self):
+        """
+        Checks if all files exist if not creates new ones 
+
+        """
+        
+        for field in self.config.get_definitions():
+            full_path = os.path.join(self.handler.directory, field["filename"])
+            
+            if not os.path.exists(full_path):
+                self.handler.write_file(field["filename"], field["header"])
+            
+            self.data[field["key"]] = self.handler.read_file(field["filename"])
+
+
+    def get_all(self, category: str) -> list[dict]:
+        self.ensure_loaded()
+        return self.data.get(category, [])
+
+
+
+    def get_by_id(self, id: str)  -> dict:
+        """
+        takes a key and an id and returns all data associated with the key and id
+        """
+        self.ensure_loaded()
+        full_lead = {}
+      
+        for category in self.data:
+            data = []
+            full_lead.update({category:data})
+
+            for lead in self.data[category]:
+
+                if lead.get("ID") == id:
+                    full_lead[category].append(lead)
+
+        print(full_lead)
+
+            
+        return full_lead
+
+    def add(self, category: str , record: dict):
+        self.ensure_loaded()
+        self.data[category].append(record)
+    
+    

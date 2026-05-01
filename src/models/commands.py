@@ -1,15 +1,15 @@
-from database import creator , manager
+from database.repository import LeadRepository
 
 class Commands:
-    def __init__(self):
-        self.config = creator.LeadConfig()
-        self.handler = creator.LeadFileHandler()
-        self.lead_manager = manager.LeadManager(self.handler, self.config)
+    def __init__(self, repository: LeadRepository):
+        self.repository = repository
+
     
 
-    def search(self,user_input : str , key : str) -> None:
+    def search(self,user_input : str , key : str) -> list[dict] | None:
 
         if key.lower().strip() == "id":
-            self.lead_manager.initialize_system()
-            return self.lead_manager.search_by_id(user_input)
+            return self.repository.get_by_id(user_input)
+        else:
+            return None
 

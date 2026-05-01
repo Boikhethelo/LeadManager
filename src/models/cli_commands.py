@@ -6,7 +6,7 @@ class Config:
 
         self.parser = self.parser()
         self.subparsers = self.subparsers()
-        self.searh_parser()
+        self.search_parser()
     
     def parser(self):
         return argparse.ArgumentParser(description="Lead Manager")
@@ -15,7 +15,7 @@ class Config:
         return self.parser.add_subparsers(dest="command" , required=True)
 
     
-    def searh_parser(self):
+    def search_parser(self):
             search_parser = self.subparsers.add_parser("search")
             search_parser.add_argument("name_number" , help = "None")
             search_parser.add_argument("key" , choices=["company" , "contacts" , "interactions" , "id"])
@@ -23,17 +23,17 @@ class Config:
 
 
 class SearchHandler:
-    def __init__(self):
-        self.commands = commands.Commands()
+    def __init__(self, commands: commands.Commands):
+        self.commands = commands
 
     def handle(self, args: argparse.Namespace) -> None:
         self.commands.search(args.name_number, args.key)
         
 
 class Controller:
-    def __init__(self, config:Config):
+    def __init__(self, config:Config, commands: commands.Commands):
         self.parser = config.parser
-        self.handlers = {"search" : SearchHandler()}
+        self.handlers = {"search" : SearchHandler(commands)}
         
     
 
@@ -42,8 +42,8 @@ class Controller:
         # try:
             args = self.parser.parse_args(input.split())
             handler = self.handlers.get(args.command)
+
             if handler:
-               
                 handler.handle(args)
         # except Exception as e:
         #     print(f"Error:{e}")
