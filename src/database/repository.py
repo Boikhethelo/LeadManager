@@ -9,7 +9,7 @@ class LeadRepository(ABC):
 
 
     @abstractmethod
-    def get_by_id(self,category: str, id: str) -> list[dict]: ...
+    def get_by_id(self,lead_id: str) -> list[dict]: ...
 
 
     @abstractmethod

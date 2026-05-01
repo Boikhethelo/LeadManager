@@ -75,6 +75,8 @@ class CsvLeadRepository(LeadRepository):
         Checks if all files exist if not creates new ones 
 
         """
+        if self.data:
+            return
         
         for field in self.config.get_definitions():
             full_path = os.path.join(self.handler.directory, field["filename"])
@@ -91,7 +93,7 @@ class CsvLeadRepository(LeadRepository):
 
 
 
-    def get_by_id(self, id: str)  -> dict:
+    def get_by_id(self, lead_id: str)  -> dict:
         """
         takes a key and an id and returns all data associated with the key and id
         """
@@ -115,5 +117,6 @@ class CsvLeadRepository(LeadRepository):
     def add(self, category: str , record: dict):
         self.ensure_loaded()
         self.data[category].append(record)
+        
     
     
