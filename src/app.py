@@ -1,5 +1,5 @@
 from database.csv_repository import CsvLeadRepository, LeadFileHandler, LeadConfig
-from models.cli_commands import Controller, Config
+from models.cli_commands import Controller, CLIConfig
 from models.commands import Commands
 
 
@@ -9,7 +9,7 @@ class App:
         config = LeadConfig()
         repository = CsvLeadRepository(handler , config)
 
-        self.controller = Controller(Config() , Commands(repository))
+        self.controller = Controller(CLIConfig() , Commands(repository))
 
     def main(self):
 

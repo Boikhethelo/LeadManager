@@ -6,10 +6,14 @@ class Commands:
 
     
 
-    def search(self,user_input : str , key : str) -> list[dict] | None:
+    def search(self,user_input : str , key : str) -> list[dict] | dict | None:
 
         if key.lower().strip() == "id":
             return self.repository.get_by_id(user_input)
+
+        elif key.lower().strip() == "category":
+            return self.repository.get_category(user_input)
+
         else:
-            return None
+            return self.repository.get_by_key(user_input,key)
 

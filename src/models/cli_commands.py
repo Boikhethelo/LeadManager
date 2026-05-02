@@ -1,18 +1,12 @@
 import argparse
 from models import commands
 
-class Config:
+class CLIConfig:
     def __init__(self):
 
-        self.parser = self.parser()
-        self.subparsers = self.subparsers()
+        self.parser = argparse.ArgumentParser(description="Lead Manager")
+        self.subparsers = self.parser.add_subparsers(dest="command" , required=True)
         self.search_parser()
-    
-    def parser(self):
-        return argparse.ArgumentParser(description="Lead Manager")
-    
-    def subparsers(self):
-        return self.parser.add_subparsers(dest="command" , required=True)
 
     
     def search_parser(self):
@@ -31,7 +25,7 @@ class SearchHandler:
         
 
 class Controller:
-    def __init__(self, config:Config, commands: commands.Commands):
+    def __init__(self, config:CLIConfig, commands: commands.Commands):
         self.parser = config.parser
         self.handlers = {"search" : SearchHandler(commands)}
         

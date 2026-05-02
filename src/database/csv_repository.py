@@ -57,6 +57,12 @@ class LeadFileHandler:
             writer = csv.DictWriter(file, fieldnames=header)
             writer.writeheader()
 
+    def save_files(self, filename: str, rows: list[dict] , header: list[str]) -> None:
+        with open(f"{self.directory}/{filename}" , "w" , newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=header)
+            writer.writeheader()
+            writer.writerows(rows)
+
 
 
 class CsvLeadRepository(LeadRepository):
@@ -132,6 +138,20 @@ class CsvLeadRepository(LeadRepository):
     def add(self, category: str , record: dict):
         self.ensure_loaded()
         self.data[category].append(record)
+
+
+    def save(self, category) -> None:
+        filename = f"{category}.csv"
+        header = list(self.data[category][0].keys())
+        self.handler.save_files(filename,self.data[category],header)
+
+
+    
+
+
+
+
+
         
     
     
