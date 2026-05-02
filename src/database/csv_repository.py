@@ -5,7 +5,6 @@ import ast
 from csv import DictReader
 from pathlib import Path
 
-from pprint import pprint
 
 from database.repository import LeadRepository
 
@@ -109,10 +108,26 @@ class CsvLeadRepository(LeadRepository):
                 if lead.get("ID") == id:
                     full_lead[category].append(lead)
 
-        print(full_lead)
-
-            
         return full_lead
+
+    def get_category(self, key: str) -> list[dict]:
+
+        self.ensure_loaded()
+
+        return self.data[key]
+
+    def get_by_key(self, value: str , key: str) -> list[dict]:
+
+        self.ensure_loaded()
+        matches = []
+
+        for category in self.data:
+                for lead in self.data[category]:
+                    if lead.get(key, "").lower() == value.lower(): #Partial matching
+                        matches.append(lead)
+        return matches
+
+
 
     def add(self, category: str , record: dict):
         self.ensure_loaded()
