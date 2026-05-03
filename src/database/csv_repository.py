@@ -111,7 +111,7 @@ class CsvLeadRepository(LeadRepository):
 
             for lead in self.data[category]:
 
-                if lead.get("ID") == id:
+                if lead.get("ID") == lead_id:
                     full_lead[category].append(lead)
 
         return full_lead
@@ -142,7 +142,8 @@ class CsvLeadRepository(LeadRepository):
 
     def save(self, category) -> None:
         filename = f"{category}.csv"
-        header = list(self.data[category][0].keys())
+        definitions = {f["key"]: f for f in self.config.get_definitions()}
+        header = definitions[category]["header"]
         self.handler.save_files(filename,self.data[category],header)
 
     def remove_lead(self, lead_id:str):
@@ -151,6 +152,7 @@ class CsvLeadRepository(LeadRepository):
 
         for category in self.data:
             self.data[category] = [lead for lead in self.data[category] if lead.get("ID") != lead_id]
+            self.save(category)
 
     def modify_lead(self, lead_id: str , category: str, key: str , change : str):
 
@@ -160,6 +162,7 @@ class CsvLeadRepository(LeadRepository):
 
             if lead.get("ID") == lead_id:
                 lead[key] = change
+                self.save(category)
                 return
             else:
                 pass
