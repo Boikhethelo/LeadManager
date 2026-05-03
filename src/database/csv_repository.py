@@ -145,6 +145,49 @@ class CsvLeadRepository(LeadRepository):
         header = list(self.data[category][0].keys())
         self.handler.save_files(filename,self.data[category],header)
 
+    def remove_lead(self, lead_id:str):
+
+        self.ensure_loaded()
+
+        for category in self.data:
+            self.data[category] = [lead for lead in self.data[category] if lead.get("ID") != lead_id]
+
+    def modify_lead(self, lead_id: str , category: str, key: str , change : str):
+
+        self.ensure_loaded()
+
+        for lead in self.data[category]:
+
+            if lead.get("ID") == lead_id:
+                lead[key] = change
+                return
+            else:
+                pass
+
+    def create_new_lead(self):
+
+        self.ensure_loaded()
+        lead_id = self.generate_id()
+
+
+        for field in self.config.get_definitions():
+            category = field["key"]
+            record = {"ID" : lead_id}
+            for key in field["header"]:
+                if key != "ID":
+                    record[key] = ""
+            self.data[category].append(record)
+            self.save(category)
+
+        return lead_id
+
+
+
+
+
+
+
+
 
     
 

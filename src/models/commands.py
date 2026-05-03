@@ -17,3 +17,15 @@ class Commands:
         else:
             return self.repository.get_by_key(user_input,key)
 
+    def delete(self, lead_id : str) -> None:
+        return self.repository.remove_lead(lead_id)
+
+
+    def modify(self,id : str , category: str , key: str ,change : str):
+        return self.repository.modify_lead(id, category , key ,change)
+
+    def add_new_lead(self):
+        return self.repository.create_new_lead()
+
+
+
