@@ -93,6 +93,10 @@ class CsvLeadRepository(LeadRepository):
 
 
     def get_all(self, category: str) -> list[dict]:
+        """
+        Return the entire lead database in memory
+
+        """
         self.ensure_loaded()
         return self.data.get(category, [])
 
