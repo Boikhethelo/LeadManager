@@ -10,12 +10,14 @@ class Commands:
 
         if key.lower().strip() == "id":
             return self.repository.get_by_id(user_input)
+        elif key.lower().strip() == "company":
+            return self.repository.get_by_company(user_input)
 
         elif key.lower().strip() == "category":
             return self.repository.get_category(user_input)
 
         else:
-            return self.repository.get_by_key(user_input,key)
+           print("Unknown search call")
 
     def delete(self, lead_id : str) -> None:
         return self.repository.remove_lead(lead_id)

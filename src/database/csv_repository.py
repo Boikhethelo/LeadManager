@@ -102,12 +102,13 @@ class CsvLeadRepository(LeadRepository):
 
 
 
-    def get_by_id(self, lead_id: str)  -> dict:
+    def get_by_id(self, lead_id: str)  -> list[dict]:
         """
         takes a key and an id and returns all data associated with the key and id
         """
         self.ensure_loaded()
         full_lead = {}
+        output = []
       
         for category in self.data:
             data = []
@@ -118,7 +119,9 @@ class CsvLeadRepository(LeadRepository):
                 if lead.get("ID") == lead_id:
                     full_lead[category].append(lead)
 
-        return full_lead
+        output.append(full_lead)
+
+        return output
 
     def get_category(self, key: str) -> list[dict]:
 
@@ -126,15 +129,17 @@ class CsvLeadRepository(LeadRepository):
 
         return self.data[key]
 
-    def get_by_key(self, value: str , key: str) -> list[dict]:
+    def get_by_company(self, name: str) -> list[dict]:
 
         self.ensure_loaded()
         matches = []
 
-        for category in self.data:
-                for lead in self.data[category]:
-                    if lead.get(key, "").lower() == value.lower(): #Partial matching
-                        matches.append(lead)
+        for lead in self.data["companies"]:
+
+                    if name in lead.get("Name", "").lower():#Partial matching
+
+                        full_lead = self.get_by_id(lead.get("ID"))
+                        matches.append(full_lead[0])
         return matches
 
 
@@ -168,8 +173,6 @@ class CsvLeadRepository(LeadRepository):
                 lead[key] = change
                 self.save(category)
                 return
-            else:
-                pass
 
     def create_new_lead(self):
 

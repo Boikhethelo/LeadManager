@@ -76,10 +76,10 @@ class Controller:
         
     
 
-    def run(self,input:str) -> None:
+    def run(self,input:list[str]) -> None:
     
          try:
-            args = self.parser.parse_args(input.split())
+            args = self.parser.parse_args(input)
             handler = self.handlers.get(args.command)
 
             if handler:

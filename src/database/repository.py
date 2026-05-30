@@ -18,7 +18,7 @@ class LeadRepository(ABC):
 
 
     @abstractmethod
-    def get_by_id(self,lead_id: str) -> dict: ...
+    def get_by_id(self,lead_id: str) -> list[dict]: ...
     """
     Takes the id as a key and returns all data associated with that key
     """
@@ -30,7 +30,7 @@ class LeadRepository(ABC):
     """
 
     @abstractmethod
-    def get_by_key(self, value: str , key: str) -> dict:...
+    def get_by_company(self, name: str) -> list[dict]:...
     """
     Use the value and key to partial search and return a list of matches.
     

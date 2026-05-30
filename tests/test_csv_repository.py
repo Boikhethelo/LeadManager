@@ -228,7 +228,7 @@ class TestGetByKey(unittest.TestCase):
                 {"ID": "2", "Source": "Referral"},
             ]
         })
-        result = repo.get_by_key("LinkedIn", "Source")
+        result = repo.get_by_company("LinkedIn", "Source")
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0]["ID"], "1")
 
@@ -236,14 +236,14 @@ class TestGetByKey(unittest.TestCase):
         repo = make_repo(data={
             "leads": [{"ID": "1", "Source": "LinkedIn"}]
         })
-        result = repo.get_by_key("linkedin", "Source")
+        result = repo.get_by_company("linkedin", "Source")
         self.assertEqual(len(result), 1)
 
     def test_returns_empty_list_for_no_match(self):
         repo = make_repo(data={
             "leads": [{"ID": "1", "Source": "LinkedIn"}]
         })
-        result = repo.get_by_key("Cold Email", "Source")
+        result = repo.get_by_company("Cold Email", "Source")
         self.assertEqual(result, [])
 
     def test_searches_across_all_categories(self):
@@ -251,25 +251,25 @@ class TestGetByKey(unittest.TestCase):
             "leads":    [{"ID": "1", "Source": "LinkedIn"}],
             "contacts": [{"ID": "1", "Source": "LinkedIn"}],
         })
-        result = repo.get_by_key("LinkedIn", "Source")
+        result = repo.get_by_company("LinkedIn", "Source")
         self.assertEqual(len(result), 2)
 
     def test_missing_key_in_row_does_not_error(self):
         repo = make_repo(data={
             "leads": [{"ID": "1"}, {"ID": "2", "Source": "LinkedIn"}]
         })
-        result = repo.get_by_key("LinkedIn", "Source")
+        result = repo.get_by_company("LinkedIn", "Source")
         self.assertEqual(len(result), 1)
 
     def test_returns_empty_list_for_empty_data(self):
         repo = make_repo(data={"leads": []})
-        result = repo.get_by_key("LinkedIn", "Source")
+        result = repo.get_by_company("LinkedIn", "Source")
         self.assertEqual(result, [])
 
     def test_calls_ensure_loaded(self):
         repo = make_repo(data={"leads": []})
         repo.ensure_loaded = MagicMock()
-        repo.get_by_key("LinkedIn", "Source")
+        repo.get_by_company("LinkedIn", "Source")
         repo.ensure_loaded.assert_called_once()
 
 
