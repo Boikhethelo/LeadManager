@@ -1,94 +1,141 @@
+"""
+CLI Controller module for the Lead Manager tool.
+Handles parsing user inputs and routing them to the correct command handlers.
+"""
+
 import argparse
 from models import commands
 
-
-
 class CLIConfig:
-    def __init__(self):
+    """
+    Configures the main argparse command-line parser and its subcommands.
+    """
 
+    def __init__(self):
         self.parser = argparse.ArgumentParser(description="Lead Manager")
-        self.subparsers = self.parser.add_subparsers(dest="command" , required=True)
+        self.subparsers = self.parser.add_subparsers(dest="command", required=True)
         self.search_parser()
         self.delete_parser()
         self.modify_parser()
         self.add_lead_parser()
 
-    
     def search_parser(self):
-            search_parser = self.subparsers.add_parser("search")
-            search_parser.add_argument("name_number" , help = "None")
-            search_parser.add_argument("key" , choices=["company" , "contacts" , "interactions" , "id"])
-            
+        """Configures the 'search' subcommand and arguments."""
+        search_parser = self.subparsers.add_parser("search")
+        search_parser.add_argument("name_number", help="None")
+        search_parser.add_argument("key", choices=["company", "contacts", "interactions", "id"])
+
     def delete_parser(self):
+        """Configures the 'delete' subcommand and arguments."""
         delete_parser = self.subparsers.add_parser("delete")
-        delete_parser.add_argument("id" , help = "The id of the lead")
+        delete_parser.add_argument("id", help="The id of the lead")
 
     def modify_parser(self):
+        """Configures the 'modify' subcommand and arguments."""
         modify_parser = self.subparsers.add_parser("modify")
-        modify_parser.add_argument("id" , help=None)
+        modify_parser.add_argument("id", help=None)
         modify_parser.add_argument("category", help=None)
-        modify_parser.add_argument("key" , help=None)
-        modify_parser.add_argument("change" , help=None)
+        modify_parser.add_argument("key", help=None)
+        modify_parser.add_argument("change", help=None)
 
     def add_lead_parser(self):
+        """Configures the 'new' subcommand for adding a lead."""
         add_lead_parser = self.subparsers.add_parser("new")
 
-
-
 class SearchHandler:
+    """
+    Handler to execute search commands.
+
+    Args:
+        commands (commands.Commands): The core logic instance.
+    """
+
     def __init__(self, commands: commands.Commands):
         self.commands = commands
 
-    def handle(self, args: argparse.Namespace) -> None:
+    def handle(self, args: argparse.Namespace) -> list[dict] | None:
+        """Executes the search command with the provided arguments."""
         return self.commands.search(args.name_number, args.key)
 
 
 class DeleteHandler:
-    def __init__(self,commands: commands.Commands):
+    """
+    Handler to execute delete commands.
+
+    Args:
+        commands (commands.Commands): The core logic instance.
+    """
+
+    def __init__(self, commands: commands.Commands):
         self.commands = commands
 
-
-
-    def handle(self, args: argparse.Namespace) -> None:
+    def handle(self, args: argparse.Namespace) -> str:
+        """Executes the delete command with the provided ID."""
         return self.commands.delete(args.id)
 
+
 class ModifyHandler:
-    def __init__(self,commands:commands.Commands):
+    """
+    Handler to execute modify commands.
+
+    Args:
+        commands (commands.Commands): The core logic instance.
+    """
+
+    def __init__(self, commands: commands.Commands):
         self.commands = commands
 
-    def handle(self, args: argparse.Namespace):
-        return self.commands.modify(args.id , args.category, args.key , args.change)
+    def handle(self, args: argparse.Namespace) ->str:
+        """Executes the modify command with the provided arguments."""
+        return self.commands.modify(args.id, args.category, args.key, args.change)
 
 
 class AddLeadHandler:
-    def __init__(self,commands:commands.Commands):
+    """
+    Handler to execute commands that add new empty leads.
+
+    Args:
+        commands (commands.Commands): The core logic instance.
+    """
+
+    def __init__(self, commands: commands.Commands) :
         self.commands = commands
 
-    def handle(self , args):
-       return self.commands.add_new_lead()
+    def handle(self, args) -> str:
+        """Executes the new lead command."""
+        return self.commands.add_new_lead()
 
 
 class Controller:
-    def __init__(self, config:CLIConfig, commands: commands.Commands , display):
+    """
+    Main controller for handling user input and triggering handlers.
+
+    Args:
+        config (CLIConfig): The initialized CLI configuration.
+        commands (commands.Commands): The core logic instance.
+        display (callable): Function responsible for rendering output.
+    """
+
+    def __init__(self, config: CLIConfig, commands: commands.Commands, display):
         self.display = display
         self.parser = config.parser
-        self.handlers = {"search" : SearchHandler(commands),
-                         "delete" : DeleteHandler(commands),
-                         "modify" : ModifyHandler(commands),
-                         "new" : AddLeadHandler(commands)}
-        
-    
+        self.handlers = {"search": SearchHandler(commands),
+                         "delete": DeleteHandler(commands),
+                         "modify": ModifyHandler(commands),
+                         "new": AddLeadHandler(commands)}
 
-    def run(self,input:list[str]) -> None:
-    
-         try:
-            args = self.parser.parse_args(input)
+    def run(self, user_input: list[str]) -> None:
+        """
+        Parses the raw user input and routes it to the correct handler.
+
+        Args:
+            user_input (list[str]): The split string input from the terminal.
+        """
+        try:
+            args = self.parser.parse_args(user_input)
             handler = self.handlers.get(args.command)
 
             if handler:
                 self.display(handler.handle(args))
-         except SystemExit:
-             print("Invalid arguments. Type 'help' for usage. ")
-        
-    
-
+        except SystemExit:
+            print("Invalid arguments. Type 'help' for usage. ")
