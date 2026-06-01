@@ -1,6 +1,8 @@
 import argparse
 from models import commands
 
+
+
 class CLIConfig:
     def __init__(self):
 
@@ -34,48 +36,46 @@ class CLIConfig:
 
 
 class SearchHandler:
-    def __init__(self, commands: commands.Commands , display):
+    def __init__(self, commands: commands.Commands):
         self.commands = commands
-        self.display = display
 
     def handle(self, args: argparse.Namespace) -> None:
-        result = self.commands.search(args.name_number, args.key)
-        self.display(result)
+        return self.commands.search(args.name_number, args.key)
 
 
 class DeleteHandler:
     def __init__(self,commands: commands.Commands):
         self.commands = commands
 
+
+
     def handle(self, args: argparse.Namespace) -> None:
-        self.commands.delete(args.id)
+        return self.commands.delete(args.id)
 
 class ModifyHandler:
     def __init__(self,commands:commands.Commands):
         self.commands = commands
 
     def handle(self, args: argparse.Namespace):
-        self.commands.modify(args.id , args.category, args.key , args.change)
+        return self.commands.modify(args.id , args.category, args.key , args.change)
 
 
 class AddLeadHandler:
-    def __init__(self,commands:commands.Commands , display):
+    def __init__(self,commands:commands.Commands):
         self.commands = commands
-        self.display = display
 
     def handle(self , args):
-       result =  self.commands.add_new_lead()
-       self.display(result)
+       return self.commands.add_new_lead()
 
 
 class Controller:
     def __init__(self, config:CLIConfig, commands: commands.Commands , display):
-        self.parser = config.parser
         self.display = display
-        self.handlers = {"search" : SearchHandler(commands , display),
+        self.parser = config.parser
+        self.handlers = {"search" : SearchHandler(commands),
                          "delete" : DeleteHandler(commands),
                          "modify" : ModifyHandler(commands),
-                         "new" : AddLeadHandler(commands , display)}
+                         "new" : AddLeadHandler(commands)}
         
     
 
@@ -86,7 +86,7 @@ class Controller:
             handler = self.handlers.get(args.command)
 
             if handler:
-                handler.handle(args)
+                self.display(handler.handle(args))
          except SystemExit:
              print("Invalid arguments. Type 'help' for usage. ")
         

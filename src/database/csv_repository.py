@@ -155,7 +155,7 @@ class CsvLeadRepository(LeadRepository):
         header = definitions[category]["header"]
         self.handler.save_files(filename,self.data[category],header)
 
-    def remove_lead(self, lead_id:str):
+    def remove_lead(self, lead_id:str) -> str:
 
         self.ensure_loaded()
 
@@ -163,7 +163,10 @@ class CsvLeadRepository(LeadRepository):
             self.data[category] = [lead for lead in self.data[category] if lead.get("ID") != lead_id]
             self.save(category)
 
-    def modify_lead(self, lead_id: str , category: str, key: str , change : str):
+        return f"lead: {lead_id} has been removed. "
+
+
+    def modify_lead(self, lead_id: str , category: str, key: str , change : str) -> str:
 
         self.ensure_loaded()
 
@@ -172,7 +175,12 @@ class CsvLeadRepository(LeadRepository):
             if lead.get("ID") == lead_id:
                 lead[key] = change
                 self.save(category)
-                return
+                return f"lead: {lead_id} {category} updated to {change}"
+
+        return f"Unable to locate lead {lead_id} "
+
+
+
 
     def create_new_lead(self):
 
@@ -193,7 +201,7 @@ class CsvLeadRepository(LeadRepository):
             self.data[category].append(record)
             self.save(category)
 
-        return lead_id
+        return f"New lead created with id of : {lead_id} "
 
 
 
