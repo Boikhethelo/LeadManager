@@ -134,7 +134,7 @@ class CsvLeadRepository(LeadRepository):
         self.ensure_loaded()
         matches = []
 
-        for lead in self.data["companies"]:
+        for lead in self.data["company"]:
 
                     if name in lead.get("Name", "").lower():#Partial matching
 
@@ -182,7 +182,7 @@ class CsvLeadRepository(LeadRepository):
 
         while lead_id in existing_ids:
             lead_id = self.generate_id()
-        
+
 
         for field in self.config.get_definitions():
             category = field["key"]

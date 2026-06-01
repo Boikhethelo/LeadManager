@@ -17,7 +17,7 @@ def make_config(definitions=None):
         definitions = [
             {"key": "leads",        "filename": "leads.csv",        "header": ["ID", "Status", "Source"]},
             {"key": "contacts",     "filename": "contacts.csv",     "header": ["ID", "Name", "Role"]},
-            {"key": "companies",    "filename": "companies.csv",    "header": ["ID", "Name", "Industry"]},
+            {"key": "companies",    "filename": "company.csv",    "header": ["ID", "Name", "Industry"]},
             {"key": "interactions", "filename": "interactions.csv", "header": ["ID", "Date", "Notes"]},
         ]
     config.get_definitions.return_value = definitions
