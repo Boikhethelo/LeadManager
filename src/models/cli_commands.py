@@ -57,12 +57,15 @@ class ModifyHandler:
     def handle(self, args: argparse.Namespace):
         self.commands.modify(args.id , args.category, args.key , args.change)
 
+
 class AddLeadHandler:
-    def __init__(self,commands:commands.Commands):
+    def __init__(self,commands:commands.Commands , display):
         self.commands = commands
+        self.display = display
 
     def handle(self , args):
-        self.commands.add_new_lead()
+       result =  self.commands.add_new_lead()
+       self.display(result)
 
 
 class Controller:
@@ -72,7 +75,7 @@ class Controller:
         self.handlers = {"search" : SearchHandler(commands , display),
                          "delete" : DeleteHandler(commands),
                          "modify" : ModifyHandler(commands),
-                         "new" : AddLeadHandler(commands)}
+                         "new" : AddLeadHandler(commands , display)}
         
     
 

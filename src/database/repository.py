@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import uuid
+import secrets
 
 class LeadRepository(ABC):
     """
@@ -7,7 +7,11 @@ class LeadRepository(ABC):
     """
 
     def generate_id(self) -> str:
-        return str(uuid.uuid4())
+        """
+        returns a unique four character id for each new lead
+
+        """
+        return secrets.token_hex(2).upper()
 
 
     @abstractmethod

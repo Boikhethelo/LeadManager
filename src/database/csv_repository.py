@@ -177,8 +177,12 @@ class CsvLeadRepository(LeadRepository):
     def create_new_lead(self):
 
         self.ensure_loaded()
+        existing_ids = {row["ID"] for row in self.data.get("leads", [])}
         lead_id = self.generate_id()
 
+        while lead_id in existing_ids:
+            lead_id = self.generate_id()
+        
 
         for field in self.config.get_definitions():
             category = field["key"]

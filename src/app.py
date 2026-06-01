@@ -1,3 +1,4 @@
+from hamcrest.core.core import isinstanceof
 from posixpath import join
 
 from database.csv_repository import CsvLeadRepository, LeadFileHandler, LeadConfig
@@ -109,10 +110,16 @@ class App:
           exit / quit                                - Close the app
             """)
 
-    def display(self, results: list[dict]) -> None:
+    def display(self, results: list[dict] | str) -> None:
+
         if not results:
             print("No results found.")
             return
+
+        elif isinstance(results, str):
+            print(f"\nNew lead created with Id of \n -{results}- ")
+            return
+
         for result in results:
             print("\n-RESULT-")
 
