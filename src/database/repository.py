@@ -116,6 +116,9 @@ class LeadRepository(ABC):
         """
         ...
 
+    @abstractmethod
+    def save_score(self, result: dict) -> None: ...
+
 
 
 

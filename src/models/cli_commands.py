@@ -18,6 +18,7 @@ class CLIConfig:
         self.delete_parser()
         self.modify_parser()
         self.add_lead_parser()
+        self.score_parser()
 
     def search_parser(self):
         """Configures the 'search' subcommand and arguments."""
@@ -41,6 +42,10 @@ class CLIConfig:
     def add_lead_parser(self):
         """Configures the 'new' subcommand for adding a lead."""
         add_lead_parser = self.subparsers.add_parser("new")
+
+    def score_parser(self):
+        score_parser = self.subparsers.add_parser("score")
+        score_parser.add_argument("id" , help="None")
 
 class SearchHandler:
     """
@@ -105,6 +110,14 @@ class AddLeadHandler:
         """Executes the new lead command."""
         return self.commands.add_new_lead()
 
+class ScoreHandler:
+
+    def __init__(self, commands: commands.Commands):
+        self.commands = commands
+
+    def handle(self, args) -> str:
+        return self.commands.score_lead(args.id)
+
 
 class Controller:
     """
@@ -122,7 +135,8 @@ class Controller:
         self.handlers = {"search": SearchHandler(commands),
                          "delete": DeleteHandler(commands),
                          "modify": ModifyHandler(commands),
-                         "new": AddLeadHandler(commands)}
+                         "new": AddLeadHandler(commands),
+                         "score": ScoreHandler(commands)}
 
     def run(self, user_input: list[str]) -> None:
         """

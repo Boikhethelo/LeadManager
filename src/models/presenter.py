@@ -21,6 +21,7 @@ class Presenter:
                 new                                        - Create a blank lead
                 modify <id> <category> <field> <value>     - Update a field
                 delete <id>                                - Remove a lead by ID
+                score  <id>                                - Scores a lead by ID
                 help                                       - Show this message
                 exit / quit                                - Close the app
                    """

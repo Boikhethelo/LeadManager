@@ -6,6 +6,7 @@ This module bridges the CLI controller and the underlying data repository.
 """
 
 from database.repository import LeadRepository
+from services.lead_scoring import LeadScoringService
 
 
 class Commands:
@@ -18,8 +19,9 @@ class Commands:
         repository (LeadRepository): The data repository instance to interact with.
     """
 
-    def __init__(self, repository: LeadRepository):
+    def __init__(self, repository: LeadRepository , scoring_services: LeadScoringService):
         self.repository = repository
+        self.scoring_services = scoring_services
 
     def search(self, user_input: str, key: str) -> list[dict] | None:
         """Searches the repository based on a specific key and input value.
@@ -79,6 +81,15 @@ class Commands:
             str: A confirmation message containing the newly generated lead ID.
         """
         return self.repository.create_new_lead()
+
+    def score_lead(self, lead_id: str) -> str:
+
+        lead_data = self.repository.get_by_id(lead_id)
+
+        result = self.scoring_services.score_lead(lead_id , lead_data[0])
+        self.repository.save_score(result)
+
+        return f"Lead Score: [{result.get("Score")}] Reasoning: {result.get("Reasoning")} And Confidence: ({result.get("Confidence"):.0%})"
 
 
 

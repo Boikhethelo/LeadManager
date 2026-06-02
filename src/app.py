@@ -11,6 +11,7 @@ from models.cli_commands import Controller, CLIConfig
 from models.commands import Commands
 from models.validator import Validator
 from models.presenter import Presenter
+from services.lead_scoring import LeadScoringService
 
 class App:
     """Initializes and runs the Lead Manager application.
@@ -30,8 +31,13 @@ class App:
         self.validator = Validator()
         self.presenter = Presenter()
 
+        display = self.presenter.display
+
+        scoring_services = LeadScoringService("API KEY")
+        app_commands = Commands(repository, scoring_services )
+
         # 3. Initialize the Controller with injected dependencies
-        self.controller = Controller(CLIConfig(), Commands(repository), self.presenter.display)
+        self.controller = Controller(CLIConfig(), app_commands , display)
 
     def main(self) -> None:
         """Starts the main interactive application loop.

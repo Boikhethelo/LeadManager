@@ -276,6 +276,21 @@ class CsvLeadRepository(LeadRepository):
 
         return f"New lead created with id of : {lead_id}"
 
+    def save_score(self, result: dict) -> None:
+        self.ensure_loaded()
+        for score in self.data["scores"]:
+
+            if score.get("ID") == result.get("ID"):
+                score["Score"] = result.get("Score")
+                score["Reasoning"] = result.get("Reasoning")
+                score["Confidence"] = result.get("Confidence")
+                score["Date Scored"] = result.get("Date Scored")
+                self.save("scores")
+                return
+
+        self.data["scores"].append(result)
+        self.save("scores")
+
 
 
 
