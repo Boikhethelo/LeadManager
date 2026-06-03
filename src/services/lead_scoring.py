@@ -35,9 +35,9 @@ class LeadScoringService:
         self.model = genai.GenerativeModel("gemini-2.0-flash")
 
     @classmethod
-    def from_env(cls, env_path: str | None = None) -> "LeadScoringService":
+    def from_env(cls) -> "LeadScoringService":
 
-        load_dotenv(dotenv_path=env_path)
+        load_dotenv()
         api_key = os.getenv("GEMINI_API_KEY")
 
         if not api_key:
