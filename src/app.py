@@ -11,7 +11,7 @@ from models.cli_commands import Controller, CLIConfig
 from models.commands import Commands
 from models.validator import Validator
 from models.presenter import Presenter
-from services.lead_scoring import LeadScoringService
+from services.lead_scoring import LeadScoringService , LeadScoringError
 
 class App:
     """Initializes and runs the Lead Manager application.
@@ -33,10 +33,21 @@ class App:
 
         display = self.presenter.display
 
-        scoring_services = LeadScoringService("API KEY")
-        app_commands = Commands(repository, scoring_services )
 
-        # 3. Initialize the Controller with injected dependencies
+
+
+        # 3. Load the scoring service — key comes from GEMINI_API_KEY in .env
+        #    Raises ValueError at startup if the key is missing, so you find out
+        #    immediately rather than when a user runs 'score'.
+
+        try:
+            scoring_services = LeadScoringService.from_env()
+        except ValueError as exc:
+            print(f"[Warning] Lead scoring unavailable: {exc}")
+            scoring_service = None
+
+        # 4. Wire everything together
+        app_commands = Commands(repository, scoring_services)
         self.controller = Controller(CLIConfig(), app_commands , display)
 
     def main(self) -> None:

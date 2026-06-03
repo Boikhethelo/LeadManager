@@ -363,7 +363,7 @@ class TestModifyHandlerDisplay(unittest.TestCase):
         display = MagicMock()
         # After the fix, ModifyHandler should accept display as a second arg,
         # mirroring SearchHandler and AddLeadHandler
-        handler = ModifyHandler(commands, display)
+        handler = ModifyHandler(commands)
         return handler, commands, display
 
     def _args(self, id="1", category="leads", key="Status", change="Closed"):
@@ -406,40 +406,40 @@ class TestParseModify(unittest.TestCase):
 
     def test_only_command_returns_none(self):
         app = self._app()
-        self.assertIsNone(app.parse_modify(["modify"]))
+        self.assertIsNone(app.validator.parse_modify(["modify"]))
 
     def test_missing_field_returns_none(self):
         app = self._app()
-        self.assertIsNone(app.parse_modify(["modify", "1", "leads"]))
+        self.assertIsNone(app.validator.parse_modify(["modify", "1", "leads"]))
 
     def test_missing_value_returns_none(self):
         app = self._app()
-        self.assertIsNone(app.parse_modify(["modify", "1", "leads", "Status"]))
+        self.assertIsNone(app.validator.parse_modify(["modify", "1", "leads", "Status"]))
 
     def test_five_parts_returns_list(self):
         app = self._app()
-        result = app.parse_modify(["modify", "1", "leads", "Status", "Closed"])
+        result = app.validator.parse_modify(["modify", "1", "leads", "Status", "Closed"])
         self.assertIsNotNone(result)
 
     def test_returns_correct_five_element_structure(self):
         app = self._app()
-        result = app.parse_modify(["modify", "42", "contacts", "Role", "Director"])
+        result = app.validator.parse_modify(["modify", "42", "contacts", "Role", "Director"])
         self.assertEqual(result, ["modify", "42", "contacts", "Role", "Director"])
 
     def test_multiword_value_is_joined(self):
         app = self._app()
-        result = app.parse_modify(["modify", "1", "leads", "Status", "Closed", "Won"])
+        result = app.validator.parse_modify(["modify", "1", "leads", "Status", "Closed", "Won"])
         self.assertEqual(result[4], "Closed Won")
 
     def test_three_word_value_fully_joined(self):
         app = self._app()
-        result = app.parse_modify(["modify", "1", "leads", "Source", "Cold", "Email", "Campaign"])
+        result = app.validator.parse_modify(["modify", "1", "leads", "Source", "Cold", "Email", "Campaign"])
         self.assertEqual(result[4], "Cold Email Campaign")
 
     def test_output_always_has_exactly_five_elements(self):
         """Value tokens are always collapsed into index 4, so len is always 5."""
         app = self._app()
-        result = app.parse_modify(["modify", "1", "leads", "Status", "A", "B", "C"])
+        result = app.validator.parse_modify(["modify", "1", "leads", "Status", "A", "B", "C"])
         self.assertEqual(len(result), 5)
 
 
