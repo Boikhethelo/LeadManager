@@ -7,6 +7,7 @@ This module bridges the CLI controller and the underlying data repository.
 
 from database.repository import LeadRepository
 from services.lead_scoring import LeadScoringService
+from services.reminder_service import ReminderService
 
 
 class Commands:
@@ -19,9 +20,10 @@ class Commands:
         repository (LeadRepository): The data repository instance to interact with.
     """
 
-    def __init__(self, repository: LeadRepository , scoring_services: LeadScoringService):
+    def __init__(self, repository: LeadRepository , scoring_services: LeadScoringService , reminder_services: ReminderService):
         self.repository = repository
         self.scoring_services = scoring_services
+        self.reminder_services = reminder_services
 
     def search(self, user_input: str, key: str) -> list[dict] | None:
         """Searches the repository based on a specific key and input value.
@@ -90,6 +92,18 @@ class Commands:
         self.repository.save_score(result)
 
         return f"Lead Score: [{result.get("Score")}] Reasoning: {result.get("Reasoning")} And Confidence: ({result.get("Confidence"):.0%})"
+
+    def get_due_leads(self , args: str) -> list[dict] | None:
+
+        if args == "today":
+            return self.reminder_services.get_due()
+
+        elif args == "late":
+            return self.reminder_services.get_overdue()
+
+        else:
+            return None
+
 
 
 

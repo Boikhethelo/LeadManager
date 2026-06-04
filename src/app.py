@@ -12,6 +12,8 @@ from models.commands import Commands
 from models.validator import Validator
 from models.presenter import Presenter
 from services.lead_scoring import LeadScoringService , LeadScoringError
+from services.reminder_service import ReminderService
+
 
 class App:
     """Initializes and runs the Lead Manager application.
@@ -33,9 +35,6 @@ class App:
 
         display = self.presenter.display
 
-
-
-
         # 3. Load the scoring service — key comes from GEMINI_API_KEY in .env
         #    Raises ValueError at startup if the key is missing, so you find out
         #    immediately rather than when a user runs 'score'.
@@ -46,9 +45,15 @@ class App:
             print(f"[Warning] Lead scoring unavailable: {exc}")
             scoring_service = None
 
-        # 4. Wire everything together
-        app_commands = Commands(repository, scoring_services)
+        #4. Load the reminder services and runs a check for due and overdue leads
+        reminder_services = ReminderService(repository)
+        banner = reminder_services.startup_check()
+
+        # 5. Wire everything together
+        app_commands = Commands(repository, scoring_services , reminder_services)
         self.controller = Controller(CLIConfig(), app_commands , display)
+
+        self.presenter.start_up(banner)
 
     def main(self) -> None:
         """Starts the main interactive application loop.
@@ -57,7 +62,6 @@ class App:
         commands like 'help' and 'exit', and routes all valid operational
         commands through the application controller.
         """
-        print("Welcome to Lead Manager. \nThis is a fast CRM designed to manage high quality B2B leads.")
 
         run = True
 

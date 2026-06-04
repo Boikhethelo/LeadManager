@@ -19,6 +19,7 @@ class CLIConfig:
         self.modify_parser()
         self.add_lead_parser()
         self.score_parser()
+        self.due_parser()
 
     def search_parser(self):
         """Configures the 'search' subcommand and arguments."""
@@ -46,6 +47,10 @@ class CLIConfig:
     def score_parser(self):
         score_parser = self.subparsers.add_parser("score")
         score_parser.add_argument("id" , help="None")
+
+    def due_parser(self):
+        due_parser = self.subparsers.add_parser("due")
+        due_parser.add_argument("timeframe" , choices=["today" , "late"])
 
 class SearchHandler:
     """
@@ -118,6 +123,14 @@ class ScoreHandler:
     def handle(self, args) -> str:
         return self.commands.score_lead(args.id)
 
+class DueHandler:
+
+    def __init__(self, commands: commands.Commands):
+        self.commands = commands
+
+    def handle(self, args) -> list[dict] | None:
+        return self.commands.get_due_leads(args.timeframe)
+
 
 class Controller:
     """
@@ -136,7 +149,8 @@ class Controller:
                          "delete": DeleteHandler(commands),
                          "modify": ModifyHandler(commands),
                          "new": AddLeadHandler(commands),
-                         "score": ScoreHandler(commands)}
+                         "score": ScoreHandler(commands),
+                         "due": DueHandler(commands)}
 
     def run(self, user_input: list[str]) -> None:
         """

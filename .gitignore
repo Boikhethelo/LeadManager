@@ -8,4 +8,4 @@ __pycache__/
 venv/
 
 # PyCharm
-.idea/
+.idea/.env

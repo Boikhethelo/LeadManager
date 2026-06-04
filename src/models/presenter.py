@@ -22,9 +22,16 @@ class Presenter:
                 modify <id> <category> <field> <value>     - Update a field
                 delete <id>                                - Remove a lead by ID
                 score  <id>                                - Scores a lead by ID
+                due    <frame>                             - Get leads due for contact
                 help                                       - Show this message
                 exit / quit                                - Close the app
                    """
+
+    def start_up(self, banner):
+        print("Welcome to Lead Manager. \nThis is a fast CRM designed to manage high quality B2B leads.\n")
+        print(banner)
+        print("\n\n")
+
 
     def print_help(self) -> None:
         """Prints the available commands and usage instructions to the console."""
