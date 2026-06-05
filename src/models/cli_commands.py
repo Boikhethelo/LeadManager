@@ -20,6 +20,7 @@ class CLIConfig:
         self.add_lead_parser()
         self.score_parser()
         self.due_parser()
+        self.export_parser()
 
     def search_parser(self):
         """Configures the 'search' subcommand and arguments."""
@@ -51,6 +52,11 @@ class CLIConfig:
     def due_parser(self):
         due_parser = self.subparsers.add_parser("due")
         due_parser.add_argument("timeframe" , choices=["today" , "late"])
+
+    def export_parser(self):
+        export_parser = self.subparsers.add_parser("export")
+        export_parser.add_argument("filename" , help="What you would like to name the file")
+        export_parser.add_argument("type" , choices=["csv" , "excel"])
 
 class SearchHandler:
     """
@@ -130,6 +136,14 @@ class DueHandler:
 
     def handle(self, args) -> list[dict] | None:
         return self.commands.get_due_leads(args.timeframe)
+
+class ExportHandler:
+
+    def __init__(self, commands: commands.Commands):
+        self.commands = commands
+
+    def handle(self, args) -> str:
+        return self.commands.export(args.filename , args.type)
 
 
 class Controller:

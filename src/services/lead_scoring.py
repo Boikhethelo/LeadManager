@@ -22,7 +22,7 @@ class LeadScoringService:
 
     _REQUIRED_KEYS = {"score", "reasoning", "confidence"}
 
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str | None):
 
         if not api_key:
             raise ValueError(

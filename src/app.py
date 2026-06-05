@@ -13,6 +13,10 @@ from models.validator import Validator
 from models.presenter import Presenter
 from services.lead_scoring import LeadScoringService , LeadScoringError
 from services.reminder_service import ReminderService
+from services.export_services import ExportService
+
+from pathlib import Path
+
 
 
 class App:
@@ -43,14 +47,18 @@ class App:
             scoring_services = LeadScoringService.from_env()
         except ValueError as exc:
             print(f"[Warning] Lead scoring unavailable: {exc}")
-            scoring_service = None
+            scoring_services = None
 
         #4. Load the reminder services and runs a check for due and overdue leads
         reminder_services = ReminderService(repository)
         banner = reminder_services.startup_check()
 
-        # 5. Wire everything together
-        app_commands = Commands(repository, scoring_services , reminder_services)
+        #5. Load the export services
+
+        export_service = ExportService(repository, Path("exports"))
+
+        # 6. Wire everything together
+        app_commands = Commands(repository, scoring_services , reminder_services, export_service)
         self.controller = Controller(CLIConfig(), app_commands , display)
 
         self.presenter.start_up(banner)

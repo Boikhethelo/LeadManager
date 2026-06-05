@@ -8,6 +8,7 @@ This module bridges the CLI controller and the underlying data repository.
 from database.repository import LeadRepository
 from services.lead_scoring import LeadScoringService
 from services.reminder_service import ReminderService
+from services.export_services import ExportService
 
 
 class Commands:
@@ -20,10 +21,11 @@ class Commands:
         repository (LeadRepository): The data repository instance to interact with.
     """
 
-    def __init__(self, repository: LeadRepository , scoring_services: LeadScoringService , reminder_services: ReminderService):
+    def __init__(self, repository: LeadRepository , scoring_services: LeadScoringService  , reminder_services: ReminderService , export_service: ExportService):
         self.repository = repository
         self.scoring_services = scoring_services
         self.reminder_services = reminder_services
+        self.export_service = export_service
 
     def search(self, user_input: str, key: str) -> list[dict] | None:
         """Searches the repository based on a specific key and input value.
@@ -103,6 +105,15 @@ class Commands:
 
         else:
             return None
+
+    def export(self, filename , args: str) -> str:
+        if args == "csv":
+            return self.export_service.export_to_csv(filename)
+        elif args == "excel":
+            return self.export_service.export_to_excel(filename)
+        else:
+            return ""
+
 
 
 
