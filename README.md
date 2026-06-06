@@ -1,67 +1,86 @@
-🚀 Python Lead Manager (CRM)
-A lightweight, local Relationship Management tool designed for sales professionals to track prospects from initial contact to closing. This project demonstrates CRUD operations, relational database management, and automated lead scoring.
+# AI-Powered Lead Manager CRM
 
-📌 Key Features
-Lead Categorization: Categorize prospects as Cold, Warm, or Hot based on custom interaction triggers.
+A fast, text-based Customer Relationship Management (CRM) system designed for managing high-quality B2B leads. Built with Python, this application features a decoupled MVC-style architecture, local CSV storage, and integrates Google's Gemini 2.0 AI for automated lead scoring.
 
-Relational Data: Tracks Companies, Key Contacts, and Products in a linked SQLite database.
+## Features
+* **Interactive CLI:** Validated, robust command-line interface for rapid data entry and retrieval.
+* **AI Lead Scoring:** Evaluates leads as Hot, Warm, or Cold based on dynamic data via the Gemini API.
+* **Automated Reminders:** Tracks due and overdue follow-ups to maintain engagement.
+* **Data Portability:** Export your entire CRM database to standardized Excel (`.xlsx`) or CSV formats.
+* **Local Storage:** No external database required; data is seamlessly managed in local CSV files.
 
-Activity Logs: Keep a historical record of every call, email, and meeting.
+## Architecture
 
-Automated Reminders: Built-in logic to flag "Hot" leads that haven't been contacted in 3+ days.
+This project is built using strict object-oriented principles, utilizing Dependency Injection and a clean separation of concerns.
 
-Export to CSV: Generate sales reports ready for Excel or Google Sheets.
+## How To Run
 
-🛠️ Tech Stack
-Language: Python 3.10+
+Step 1 install dependencies: 
+pip3 install -r requirements.txt
 
-Database: SQLite / SQLAlchemy (ORM)
+Step 2: Configure API Keys:
+Create a .env file in the root directory and add your Gemini API key for the AI scoring feature:
 
-UI/Framework: Flask (Web) / Click (CLI) (Choose one)
+Code snippet
+GEMINI_API_KEY=your_api_key_here
 
-Data Analysis: Pandas
+Step 3:
+Run the application 
 
-📂 Project Structure
-Plaintext
+## Usage Examples
 
-lead-manager/
-├── src/
-│   ├── database/        # SQLite schema and initialization
-│   ├── models/          # Data models (Lead, Company, Contact)
-│   ├── services/        # Business logic (Scoring, Emailing)
-│   └── app.py           # Application entry point
-├── tests/               # Unit tests for core logic
-├── requirements.txt     # Dependency list
-└── README.md            # You are here!
-⚙️ Installation & Setup
-Clone the repository:
+Create a new lead: new
 
-Bash
+Update lead status: modify A1B2 leads Status Warm
 
-git clone https://github.com/yourusername/lead-manager.git
-cd lead-manager
-Set up a virtual environment:
+Search by company: search TechCorp company
 
-Bash
+Run AI scoring: score A1B2
 
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-Install dependencies:
+Check follow-ups: due today or due late
 
-Bash
+Export data: export q1_report excel
 
-pip install -r requirements.txt
-Initialize the database:
+### Class Diagram
 
-Bash
-
-python src/init_db.py
-📈 Future Enhancements
-[ ] Integration with LinkedIn API for contact enrichment.
-
-[ ] Dashboard visualization using Matplotlib or Plotly.
-
-[ ] Multi-user authentication for sales teams.
-
-📄 License
-Distributed under the MIT License. See LICENSE for more information.
+```mermaid
+classDiagram
+    class App {
+        +main()
+    }
+    class Controller {
+        +run(user_input)
+    }
+    class Validator {
+        +validate_command(raw_input)
+    }
+    class Presenter {
+        +display(results)
+    }
+    class Commands {
+        +search()
+        +add_new_lead()
+        +modify()
+        +delete()
+        +score_lead()
+    }
+    class LeadRepository {
+        <<interface>>
+        +get_by_id()
+        +save()
+    }
+    class CsvLeadRepository {
+        -data: dict
+        +ensure_loaded()
+    }
+    class LeadScoringService {
+        +score_lead()
+    }
+    
+    App --> Controller
+    App --> Validator
+    App --> Presenter
+    Controller --> Commands
+    Commands --> LeadRepository
+    Commands --> LeadScoringService
+    LeadRepository <|-- CsvLeadRepository
