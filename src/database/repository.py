@@ -117,7 +117,17 @@ class LeadRepository(ABC):
         ...
 
     @abstractmethod
-    def save_score(self, result: dict) -> None: ...
+    def save_score(self, result: dict) -> None:
+        """Saves the score to database.
+
+        Args:
+            result(str): The score received from the scoring service.
+
+        Returns:
+            None
+
+        """
+        ...
 
 
 
